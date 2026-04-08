@@ -8,8 +8,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ChevronLeft, ChevronRight, Maximize2, Minimize2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-// Default fallback URL
-const DEFAULT_BASE_URL = "https://raw.githubusercontent.com/koenfelder/KF-Website/main/Untitled/images/";
+// Default fallback URL - Updated based on user confirmation
+const DEFAULT_BASE_URL = "https://raw.githubusercontent.com/koenfelder/KF-Website/main/images/";
 
 const metadata: Record<number, { title: string; description: string }> = {
   1: { title: "Cover", description: "SkinWalker Society Volume 1, Issue No. 5 - All About Skinwalkers!" },
