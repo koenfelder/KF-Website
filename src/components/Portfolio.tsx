@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import Logo from './Logo';
 
 export default function Portfolio() {
-  const magazineBaseUrl = "https://raw.githubusercontent.com/koenfelder/KF-Website/main/images/";
+  const magazineBaseUrl = localStorage.getItem('magazine_base_url') || "https://raw.githubusercontent.com/koenfelder/KF-Website/main/Untitled/images/";
   const magazineCover = `${magazineBaseUrl}${encodeURIComponent("SCM Final Version _Page_01.png")}`;
 
   const projects = [

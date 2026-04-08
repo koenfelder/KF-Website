@@ -8,8 +8,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ChevronLeft, ChevronRight, Maximize2, Minimize2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-// Default fallback URL - Updated based on user confirmation
-const DEFAULT_BASE_URL = "https://raw.githubusercontent.com/koenfelder/KF-Website/main/images/";
+// Default fallback URL
+const DEFAULT_BASE_URL = "https://raw.githubusercontent.com/koenfelder/KF-Website/main/Untitled/images/";
 
 const metadata: Record<number, { title: string; description: string }> = {
   1: { title: "Cover", description: "SkinWalker Society Volume 1, Issue No. 5 - All About Skinwalkers!" },
@@ -27,17 +27,20 @@ const metadata: Record<number, { title: string; description: string }> = {
 };
 
 export default function MagazineViewer() {
+  const [baseUrl, setBaseUrl] = useState(() => {
+    return localStorage.getItem('magazine_base_url') || DEFAULT_BASE_URL;
+  });
   const [currentPage, setCurrentPage] = useState(0);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [imageError, setImageError] = useState<Record<number, boolean>>({});
-  const [baseUrl, setBaseUrl] = useState(DEFAULT_BASE_URL);
-  const [hasTriedFallback, setHasTriedFallback] = useState(false);
+  const [showDebugger, setShowDebugger] = useState(false);
 
   // Generate pages dynamically based on current baseUrl
   const pages = Array.from({ length: 24 }, (_, i) => {
     const pageNum = i + 1;
     const paddedPageNum = pageNum.toString().padStart(2, '0');
     
+    // Try both padded and non-padded page numbers
     const fileName = `SCM Final Version _Page_${paddedPageNum}.png`;
     const encodedFileName = encodeURIComponent(fileName);
     
@@ -49,27 +52,61 @@ export default function MagazineViewer() {
     };
   });
 
-  const handleImageError = (idx: number) => {
-    // If the first page fails, try switching from 'main' to 'master' (or vice versa)
-    if (!hasTriedFallback) {
-      const newUrl = baseUrl.includes('/main/') 
-        ? baseUrl.replace('/main/', '/master/') 
-        : baseUrl.replace('/master/', '/main/');
-      
-      setBaseUrl(newUrl);
-      setHasTriedFallback(true);
-      setImageError({}); // Reset errors to try again with new URL
-      console.log("Switching branch fallback to:", newUrl);
-    } else {
-      setImageError(prev => ({ ...prev, [idx]: true }));
+  const handleBaseUrlChange = (newUrl: string) => {
+    // Ensure URL ends with a slash
+    const formattedUrl = newUrl.endsWith('/') ? newUrl : `${newUrl}/`;
+    setBaseUrl(formattedUrl);
+    localStorage.setItem('magazine_base_url', formattedUrl);
+    setImageError({}); // Reset errors when URL changes
+  };
+
+  const tryDiscovery = async () => {
+    const commonPaths = [
+      "https://raw.githubusercontent.com/koenfelder/KF-Website/main/Untitled/images/",
+      "https://raw.githubusercontent.com/koenfelder/KF-Website/main/images/",
+      "https://raw.githubusercontent.com/koenfelder/KF-Website/master/Untitled/images/",
+      "https://raw.githubusercontent.com/koenfelder/KF-Website/master/images/",
+      "https://raw.githubusercontent.com/koenfelder/KF-Website/main/KF-Website/Untitled/images/",
+      "https://koenfelder.github.io/KF-Website/images/",
+      "https://koenfelder.github.io/KF-Website/Untitled/images/",
+    ];
+
+    for (const path of commonPaths) {
+      const testUrl = `${path}${encodeURIComponent("SCM Final Version _Page_01.png")}`;
+      try {
+        const response = await fetch(testUrl, { method: 'HEAD' });
+        if (response.ok) {
+          handleBaseUrlChange(path);
+          alert(`Success! Found working path: ${path}`);
+          return;
+        }
+      } catch (e) {
+        // Continue to next path
+      }
+    }
+    alert("Could not automatically find the images. Please check if your GitHub repository is PUBLIC.");
+  };
+
+  const handleManualUrl = (fullUrl: string) => {
+    try {
+      const url = new URL(fullUrl);
+      // Extract everything before the filename
+      const pathParts = url.pathname.split('/');
+      const fileName = pathParts.pop();
+      if (fileName && fileName.includes('_Page_')) {
+        const newBase = `${url.origin}${pathParts.join('/')}/`;
+        handleBaseUrlChange(newBase);
+        alert("Successfully learned the base URL from your link!");
+      } else {
+        alert("Please paste a full URL to one of your magazine pages (e.g. Page 01).");
+      }
+    } catch (e) {
+      alert("Invalid URL format.");
     }
   };
 
-  const forceReload = () => {
-    setImageError({});
-    setHasTriedFallback(false);
-    setBaseUrl(DEFAULT_BASE_URL);
-    setCurrentPage(0);
+  const handleImageError = (idx: number) => {
+    setImageError(prev => ({ ...prev, [idx]: true }));
   };
 
   const nextPage = () => {
@@ -98,6 +135,14 @@ export default function MagazineViewer() {
         </div>
         <div className="flex items-center gap-4">
           <button 
+            onClick={() => setShowDebugger(!showDebugger)}
+            className={`flex items-center gap-2 px-3 py-1 rounded-full transition-colors ${showDebugger ? 'bg-brand text-white' : 'text-neutral-400 hover:text-white hover:bg-white/5'}`}
+            title="Debug Image Path"
+          >
+            <Maximize2 className="w-4 h-4 rotate-45" />
+            <span className="text-[10px] font-bold uppercase tracking-wider">Debug Path</span>
+          </button>
+          <button 
             onClick={() => setIsFullScreen(!isFullScreen)}
             className="p-2 text-neutral-400 hover:text-white transition-colors"
           >
@@ -105,6 +150,89 @@ export default function MagazineViewer() {
           </button>
         </div>
       </nav>
+
+      {/* Debugger Panel */}
+      {showDebugger && (
+        <div className="bg-neutral-900 border-b border-white/10 p-6 animate-in slide-in-from-top duration-300">
+          <div className="max-w-4xl mx-auto">
+            <h3 className="text-sm font-bold mb-4 flex items-center gap-2">
+              <span className="w-2 h-2 bg-brand rounded-full animate-pulse" />
+              Image Path Debugger
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-[10px] uppercase tracking-widest text-neutral-500 mb-2">Base Folder URL</label>
+                <div className="flex gap-2">
+                  <input 
+                    type="text" 
+                    value={baseUrl}
+                    onChange={(e) => handleBaseUrlChange(e.target.value)}
+                    className="flex-1 bg-black border border-white/10 rounded px-4 py-2 text-sm font-mono focus:border-brand outline-none transition-colors"
+                    placeholder="https://raw.githubusercontent.com/..."
+                  />
+                  <button 
+                    onClick={() => handleBaseUrlChange(DEFAULT_BASE_URL)}
+                    className="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 rounded text-xs transition-colors"
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-black/40 p-4 rounded border border-white/5">
+                  <p className="text-[10px] text-neutral-500 mb-2 uppercase">Common Fixes</p>
+                  <div className="flex flex-wrap gap-2">
+                    <button 
+                      onClick={tryDiscovery}
+                      className="text-[10px] bg-brand text-white px-3 py-1 rounded font-bold hover:bg-brand-dark transition-colors"
+                    >
+                      Run Auto-Discovery
+                    </button>
+                    <button 
+                      onClick={() => handleBaseUrlChange(baseUrl.replace('/main/', '/master/'))}
+                      className="text-[10px] bg-neutral-800 hover:bg-neutral-700 px-3 py-1 rounded"
+                    >
+                      Try 'master' branch
+                    </button>
+                    <button 
+                      onClick={() => handleBaseUrlChange(baseUrl.replace('/Untitled/', '/'))}
+                      className="text-[10px] bg-neutral-800 hover:bg-neutral-700 px-3 py-1 rounded"
+                    >
+                      Remove 'Untitled'
+                    </button>
+                    <button 
+                      onClick={() => handleBaseUrlChange(baseUrl.replace('/images/', '/'))}
+                      className="text-[10px] bg-neutral-800 hover:bg-neutral-700 px-3 py-1 rounded"
+                    >
+                      Remove 'images'
+                    </button>
+                  </div>
+                </div>
+                <div className="bg-black/40 p-4 rounded border border-white/5">
+                  <p className="text-[10px] text-neutral-500 mb-2 uppercase">Manual URL Learning</p>
+                  <p className="text-[10px] text-neutral-400 mb-3">Paste the URL of any single page from GitHub:</p>
+                  <input 
+                    type="text" 
+                    placeholder="Paste full URL to Page 01 here..."
+                    className="w-full bg-black border border-white/10 rounded px-3 py-1.5 text-xs font-mono mb-2 focus:border-brand outline-none"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleManualUrl(e.currentTarget.value);
+                    }}
+                  />
+                  <p className="text-[9px] text-neutral-600 italic">Example: https://raw.githubusercontent.com/.../Page_01.png</p>
+                </div>
+                <div className="bg-black/40 p-4 rounded border border-white/5">
+                  <p className="text-[10px] text-red-500 mb-2 uppercase font-bold">⚠️ Private Repository?</p>
+                  <p className="text-[10px] text-neutral-400 leading-relaxed">
+                    If your GitHub repository is <strong>Private</strong>, images will never load here. 
+                    Go to GitHub Settings → General → Danger Zone → <strong>Change visibility to Public</strong>.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Viewer Area */}
       <div className={`flex flex-col items-center justify-center p-4 md:p-12 ${isFullScreen ? 'h-[calc(100vh-80px)]' : 'min-h-[80vh]'}`}>
@@ -122,23 +250,15 @@ export default function MagazineViewer() {
                 <div className="w-full h-full flex flex-col items-center justify-center bg-neutral-900 p-12 text-center">
                   <p className="text-neutral-500 mb-4">Image could not be loaded</p>
                   <code className="text-[10px] text-neutral-700 break-all max-w-xs mb-6">{pages[currentPage].image}</code>
-                  <div className="flex gap-2">
-                    <button 
-                      onClick={() => {
-                        navigator.clipboard.writeText(pages[currentPage].image);
-                        alert("URL copied to clipboard! Try opening it in a new tab to see if it works.");
-                      }}
-                      className="text-xs bg-neutral-800 hover:bg-neutral-700 text-white px-4 py-2 rounded-full transition-colors"
-                    >
-                      Copy Failed URL
-                    </button>
-                    <button 
-                      onClick={forceReload}
-                      className="text-xs bg-brand hover:bg-brand-dark text-white px-4 py-2 rounded-full transition-colors"
-                    >
-                      Force Refresh
-                    </button>
-                  </div>
+                  <button 
+                    onClick={() => {
+                      navigator.clipboard.writeText(pages[currentPage].image);
+                      alert("URL copied to clipboard! Try opening it in a new tab to see if it works.");
+                    }}
+                    className="text-xs bg-neutral-800 hover:bg-neutral-700 text-white px-4 py-2 rounded-full transition-colors"
+                  >
+                    Copy Failed URL
+                  </button>
                 </div>
               ) : (
                 <img 
