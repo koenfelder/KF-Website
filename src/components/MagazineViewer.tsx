@@ -89,67 +89,66 @@ export default function MagazineViewer() {
       </nav>
 
       {/* Viewer Area */}
-      <div className={`flex flex-col items-center justify-center p-4 md:p-12 ${showGrid ? 'h-[calc(100vh-80px)] opacity-20 pointer-events-none blur-sm' : 'min-h-[80vh]'}`}>
-        <div className="relative max-w-4xl w-full aspect-[3/4] bg-neutral-900 rounded-lg shadow-2xl overflow-hidden border border-white/5">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentPage}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-              className="absolute inset-0"
-            >
-              {imageError[currentPage] ? (
-                <div className="w-full h-full flex flex-col items-center justify-center bg-neutral-900 p-12 text-center">
-                  <p className="text-neutral-500 mb-4">Image could not be loaded</p>
-                  <code className="text-[10px] text-neutral-700 break-all max-w-xs mb-6">{pages[currentPage].image}</code>
-                  <button 
-                    onClick={() => {
-                      navigator.clipboard.writeText(pages[currentPage].image);
-                      alert("URL copied to clipboard! Try opening it in a new tab to see if it works.");
-                    }}
-                    className="text-xs bg-neutral-800 hover:bg-neutral-700 text-white px-4 py-2 rounded-full transition-colors"
-                  >
-                    Copy Failed URL
-                  </button>
-                </div>
-              ) : (
-                <img 
-                  src={pages[currentPage].image} 
-                  alt={pages[currentPage].title}
-                  className="w-full h-full object-cover"
-                  referrerPolicy="no-referrer"
-                  onError={() => handleImageError(currentPage)}
-                />
-              )}
-              {/* Overlay Info */}
-              <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 to-transparent">
-                <h2 className="text-2xl font-bold mb-2">{pages[currentPage].title}</h2>
-                <p className="text-neutral-300 text-sm max-w-xl">{pages[currentPage].description}</p>
-              </div>
-            </motion.div>
-          </AnimatePresence>
+      <div className={`flex flex-col items-center justify-center p-4 md:p-8 ${showGrid ? 'h-[calc(100vh-80px)] opacity-20 pointer-events-none blur-sm' : 'min-h-[85vh]'}`}>
+        <div className="flex items-center justify-center gap-2 md:gap-8 w-full max-w-6xl">
+          <button 
+            onClick={prevPage}
+            disabled={currentPage === 0}
+            className={`p-2 md:p-4 bg-white/5 hover:bg-white/10 backdrop-blur-sm transition-all rounded-full ${currentPage === 0 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+          >
+            <ChevronLeft className="w-6 h-6 md:w-8 h-8" />
+          </button>
 
-          {/* Navigation Controls */}
-          <div className="absolute inset-y-0 left-0 flex items-center">
-            <button 
-              onClick={prevPage}
-              disabled={currentPage === 0}
-              className={`p-4 bg-black/20 hover:bg-black/50 backdrop-blur-sm transition-all rounded-r-xl ${currentPage === 0 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
-            >
-              <ChevronLeft className="w-8 h-8" />
-            </button>
+          <div className="relative max-w-4xl w-full max-h-[75vh] aspect-[3/4] bg-neutral-900 rounded-lg shadow-2xl overflow-hidden border border-white/5">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentPage}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="absolute inset-0 flex items-center justify-center"
+              >
+                {imageError[currentPage] ? (
+                  <div className="w-full h-full flex flex-col items-center justify-center bg-neutral-900 p-12 text-center">
+                    <p className="text-neutral-500 mb-4">Image could not be loaded</p>
+                    <code className="text-[10px] text-neutral-700 break-all max-w-xs mb-6">{pages[currentPage].image}</code>
+                    <button 
+                      onClick={() => {
+                        navigator.clipboard.writeText(pages[currentPage].image);
+                        alert("URL copied to clipboard! Try opening it in a new tab to see if it works.");
+                      }}
+                      className="text-xs bg-neutral-800 hover:bg-neutral-700 text-white px-4 py-2 rounded-full transition-colors"
+                    >
+                      Copy Failed URL
+                    </button>
+                  </div>
+                ) : (
+                  <img 
+                    src={pages[currentPage].image} 
+                    alt={pages[currentPage].title}
+                    className="max-w-full max-h-full object-contain"
+                    referrerPolicy="no-referrer"
+                    onError={() => handleImageError(currentPage)}
+                  />
+                )}
+              </motion.div>
+            </AnimatePresence>
           </div>
-          <div className="absolute inset-y-0 right-0 flex items-center">
-            <button 
-              onClick={nextPage}
-              disabled={currentPage === pages.length - 1}
-              className={`p-4 bg-black/20 hover:bg-black/50 backdrop-blur-sm transition-all rounded-l-xl ${currentPage === pages.length - 1 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
-            >
-              <ChevronRight className="w-8 h-8" />
-            </button>
-          </div>
+
+          <button 
+            onClick={nextPage}
+            disabled={currentPage === pages.length - 1}
+            className={`p-2 md:p-4 bg-white/5 hover:bg-white/10 backdrop-blur-sm transition-all rounded-full ${currentPage === pages.length - 1 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+          >
+            <ChevronRight className="w-6 h-6 md:w-8 h-8" />
+          </button>
+        </div>
+
+        {/* Page Info */}
+        <div className="mt-6 text-center max-w-2xl px-4">
+          <h2 className="text-xl font-bold mb-1">{pages[currentPage].title}</h2>
+          <p className="text-neutral-400 text-sm leading-relaxed">{pages[currentPage].description}</p>
         </div>
 
         {/* Page Indicator */}
