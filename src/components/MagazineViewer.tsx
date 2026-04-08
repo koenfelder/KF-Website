@@ -30,8 +30,8 @@ export default function MagazineViewer() {
   const [currentPage, setCurrentPage] = useState(0);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [imageError, setImageError] = useState<Record<number, boolean>>({});
-
-  const baseUrl = DEFAULT_BASE_URL;
+  const [baseUrl, setBaseUrl] = useState(DEFAULT_BASE_URL);
+  const [hasTriedFallback, setHasTriedFallback] = useState(false);
 
   // Generate pages dynamically based on current baseUrl
   const pages = Array.from({ length: 24 }, (_, i) => {
@@ -50,7 +50,26 @@ export default function MagazineViewer() {
   });
 
   const handleImageError = (idx: number) => {
-    setImageError(prev => ({ ...prev, [idx]: true }));
+    // If the first page fails, try switching from 'main' to 'master' (or vice versa)
+    if (!hasTriedFallback) {
+      const newUrl = baseUrl.includes('/main/') 
+        ? baseUrl.replace('/main/', '/master/') 
+        : baseUrl.replace('/master/', '/main/');
+      
+      setBaseUrl(newUrl);
+      setHasTriedFallback(true);
+      setImageError({}); // Reset errors to try again with new URL
+      console.log("Switching branch fallback to:", newUrl);
+    } else {
+      setImageError(prev => ({ ...prev, [idx]: true }));
+    }
+  };
+
+  const forceReload = () => {
+    setImageError({});
+    setHasTriedFallback(false);
+    setBaseUrl(DEFAULT_BASE_URL);
+    setCurrentPage(0);
   };
 
   const nextPage = () => {
@@ -103,15 +122,23 @@ export default function MagazineViewer() {
                 <div className="w-full h-full flex flex-col items-center justify-center bg-neutral-900 p-12 text-center">
                   <p className="text-neutral-500 mb-4">Image could not be loaded</p>
                   <code className="text-[10px] text-neutral-700 break-all max-w-xs mb-6">{pages[currentPage].image}</code>
-                  <button 
-                    onClick={() => {
-                      navigator.clipboard.writeText(pages[currentPage].image);
-                      alert("URL copied to clipboard! Try opening it in a new tab to see if it works.");
-                    }}
-                    className="text-xs bg-neutral-800 hover:bg-neutral-700 text-white px-4 py-2 rounded-full transition-colors"
-                  >
-                    Copy Failed URL
-                  </button>
+                  <div className="flex gap-2">
+                    <button 
+                      onClick={() => {
+                        navigator.clipboard.writeText(pages[currentPage].image);
+                        alert("URL copied to clipboard! Try opening it in a new tab to see if it works.");
+                      }}
+                      className="text-xs bg-neutral-800 hover:bg-neutral-700 text-white px-4 py-2 rounded-full transition-colors"
+                    >
+                      Copy Failed URL
+                    </button>
+                    <button 
+                      onClick={forceReload}
+                      className="text-xs bg-brand hover:bg-brand-dark text-white px-4 py-2 rounded-full transition-colors"
+                    >
+                      Force Refresh
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <img 
