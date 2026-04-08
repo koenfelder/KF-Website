@@ -4,12 +4,15 @@
  */
 
 import React from 'react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, Phone, ExternalLink, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
 
 export default function Portfolio() {
+  const magazineBaseUrl = "https://raw.githubusercontent.com/koenfelder/KF-Website/main/images/";
+  const magazineCover = `${magazineBaseUrl}${encodeURIComponent("SCM Final Version _Page_01.png")}`;
+
   const projects = [
     {
       title: "README Generator",
@@ -20,9 +23,9 @@ export default function Portfolio() {
       tags: ["React", "Tailwind", "Markdown"]
     },
     {
-      title: "NovaTech",
+      title: "TechNova",
       description: "A high-end retail electronics website with a focus on luxury and performance.",
-      link: "https://koenfelder.github.io/NovaTech-Website/",
+      link: "https://koenfelder.github.io/TechNova-Website/",
       image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800",
       tags: ["E-commerce", "UI/UX", "Responsive"]
     },
@@ -33,6 +36,14 @@ export default function Portfolio() {
       isInternal: true,
       image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800",
       tags: ["React", "Firebase", "Analytics"]
+    },
+    {
+      title: "SkinWalker Society Vol. 1, No. 5",
+      description: "A collaborative subculture magazine exploring cryptozoology and the history of Skinwalkers.",
+      link: "/magazine",
+      isInternal: true,
+      image: magazineCover,
+      tags: ["Editorial Design", "Digital Publishing", "Collaboration"]
     }
   ];
 

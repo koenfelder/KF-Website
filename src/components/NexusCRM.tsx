@@ -51,7 +51,7 @@ const projectStatus = [
 ];
 
 const clients = [
-  { id: 1, name: 'NovaTech Solutions', industry: 'Technology', status: 'Active', revenue: '$12,400' },
+  { id: 1, name: 'TechNova Solutions', industry: 'Technology', status: 'Active', revenue: '$12,400' },
   { id: 2, name: 'Vanguard Group', industry: 'Finance', status: 'Pending', revenue: '$8,200' },
   { id: 3, name: 'Stratos Media', industry: 'Marketing', status: 'Active', revenue: '$15,100' },
   { id: 4, name: 'EcoFlow Systems', industry: 'Energy', status: 'Inactive', revenue: '$4,500' },
@@ -129,7 +129,7 @@ export default function NexusCRM() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
-                { name: 'Brand Refresh', client: 'NovaTech', progress: 75, deadline: 'Apr 20' },
+                { name: 'Brand Refresh', client: 'TechNova', progress: 75, deadline: 'Apr 20' },
                 { name: 'E-commerce Build', client: 'Vanguard', progress: 30, deadline: 'May 12' },
                 { name: 'SEO Strategy', client: 'Stratos', progress: 90, deadline: 'Apr 15' },
               ].map((project, i) => (
