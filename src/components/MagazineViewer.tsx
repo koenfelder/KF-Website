@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ChevronLeft, ChevronRight, Maximize2, Minimize2 } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight, Maximize2, Minimize2, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 // Default fallback URL - Updated based on user confirmation
@@ -134,13 +134,19 @@ export default function MagazineViewer() {
           <p className="text-xs text-neutral-500 uppercase tracking-widest">Vol. 1, No. 5</p>
         </div>
         <div className="flex items-center gap-4">
+          {!showDebugger && (
+            <div className="hidden md:flex items-center gap-2 text-[10px] text-brand font-bold animate-pulse">
+              <span>Images not loading?</span>
+              <ArrowRight className="w-3 h-3" />
+            </div>
+          )}
           <button 
             onClick={() => setShowDebugger(!showDebugger)}
-            className={`flex items-center gap-2 px-3 py-1 rounded-full transition-colors ${showDebugger ? 'bg-brand text-white' : 'text-neutral-400 hover:text-white hover:bg-white/5'}`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all shadow-lg ${showDebugger ? 'bg-brand text-white scale-105' : 'bg-white text-black hover:bg-neutral-200'}`}
             title="Debug Image Path"
           >
             <Maximize2 className="w-4 h-4 rotate-45" />
-            <span className="text-[10px] font-bold uppercase tracking-wider">Debug Path</span>
+            <span className="text-[11px] font-black uppercase tracking-tighter">Fix Images / Debug</span>
           </button>
           <button 
             onClick={() => setIsFullScreen(!isFullScreen)}
@@ -182,6 +188,12 @@ export default function MagazineViewer() {
                 <div className="bg-black/40 p-4 rounded border border-white/5">
                   <p className="text-[10px] text-neutral-500 mb-2 uppercase">Common Fixes</p>
                   <div className="flex flex-wrap gap-2">
+                    <button 
+                      onClick={() => handleBaseUrlChange(DEFAULT_BASE_URL)}
+                      className="text-[10px] bg-green-600 text-white px-3 py-1 rounded font-bold hover:bg-green-700 transition-colors"
+                    >
+                      Reset to Recommended Path
+                    </button>
                     <button 
                       onClick={tryDiscovery}
                       className="text-[10px] bg-brand text-white px-3 py-1 rounded font-bold hover:bg-brand-dark transition-colors"
