@@ -8,8 +8,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ChevronLeft, ChevronRight, Maximize2, Minimize2, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-// Default fallback URL - Updated based on user confirmation
-const DEFAULT_BASE_URL = "https://raw.githubusercontent.com/koenfelder/KF-Website/main/images/";
+// The images are located in the 'images' folder within the repository
+const BASE_URL = "https://raw.githubusercontent.com/koenfelder/KF-Website/main/images/";
 
 const metadata: Record<number, { title: string; description: string }> = {
   1: { title: "Cover", description: "SkinWalker Society Volume 1, Issue No. 5 - All About Skinwalkers!" },
@@ -27,83 +27,24 @@ const metadata: Record<number, { title: string; description: string }> = {
 };
 
 export default function MagazineViewer() {
-  const [baseUrl, setBaseUrl] = useState(() => {
-    return localStorage.getItem('magazine_base_url') || DEFAULT_BASE_URL;
-  });
   const [currentPage, setCurrentPage] = useState(0);
-  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [showGrid, setShowGrid] = useState(false);
   const [imageError, setImageError] = useState<Record<number, boolean>>({});
-  const [showDebugger, setShowDebugger] = useState(false);
 
-  // Generate pages dynamically based on current baseUrl
+  // Generate pages based on the hardcoded BASE_URL
   const pages = Array.from({ length: 24 }, (_, i) => {
     const pageNum = i + 1;
     const paddedPageNum = pageNum.toString().padStart(2, '0');
-    
-    // Try both padded and non-padded page numbers
     const fileName = `SCM Final Version _Page_${paddedPageNum}.png`;
     const encodedFileName = encodeURIComponent(fileName);
     
     return {
       id: pageNum,
       title: metadata[pageNum]?.title || `Page ${pageNum}`,
-      image: `${baseUrl}${encodedFileName}`,
+      image: `${BASE_URL}${encodedFileName}`,
       description: metadata[pageNum]?.description || `Continuing the exploration of the Skinwalker Society subculture.`
     };
   });
-
-  const handleBaseUrlChange = (newUrl: string) => {
-    // Ensure URL ends with a slash
-    const formattedUrl = newUrl.endsWith('/') ? newUrl : `${newUrl}/`;
-    setBaseUrl(formattedUrl);
-    localStorage.setItem('magazine_base_url', formattedUrl);
-    setImageError({}); // Reset errors when URL changes
-  };
-
-  const tryDiscovery = async () => {
-    const commonPaths = [
-      "https://raw.githubusercontent.com/koenfelder/KF-Website/main/Untitled/images/",
-      "https://raw.githubusercontent.com/koenfelder/KF-Website/main/images/",
-      "https://raw.githubusercontent.com/koenfelder/KF-Website/master/Untitled/images/",
-      "https://raw.githubusercontent.com/koenfelder/KF-Website/master/images/",
-      "https://raw.githubusercontent.com/koenfelder/KF-Website/main/KF-Website/Untitled/images/",
-      "https://koenfelder.github.io/KF-Website/images/",
-      "https://koenfelder.github.io/KF-Website/Untitled/images/",
-    ];
-
-    for (const path of commonPaths) {
-      const testUrl = `${path}${encodeURIComponent("SCM Final Version _Page_01.png")}`;
-      try {
-        const response = await fetch(testUrl, { method: 'HEAD' });
-        if (response.ok) {
-          handleBaseUrlChange(path);
-          alert(`Success! Found working path: ${path}`);
-          return;
-        }
-      } catch (e) {
-        // Continue to next path
-      }
-    }
-    alert("Could not automatically find the images. Please check if your GitHub repository is PUBLIC.");
-  };
-
-  const handleManualUrl = (fullUrl: string) => {
-    try {
-      const url = new URL(fullUrl);
-      // Extract everything before the filename
-      const pathParts = url.pathname.split('/');
-      const fileName = pathParts.pop();
-      if (fileName && fileName.includes('_Page_')) {
-        const newBase = `${url.origin}${pathParts.join('/')}/`;
-        handleBaseUrlChange(newBase);
-        alert("Successfully learned the base URL from your link!");
-      } else {
-        alert("Please paste a full URL to one of your magazine pages (e.g. Page 01).");
-      }
-    } catch (e) {
-      alert("Invalid URL format.");
-    }
-  };
 
   const handleImageError = (idx: number) => {
     setImageError(prev => ({ ...prev, [idx]: true }));
@@ -122,7 +63,7 @@ export default function MagazineViewer() {
   };
 
   return (
-    <div className={`min-h-screen bg-neutral-950 text-white font-sans ${isFullScreen ? 'overflow-hidden' : ''}`}>
+    <div className={`min-h-screen bg-neutral-950 text-white font-sans ${showGrid ? 'overflow-hidden' : ''}`}>
       {/* Header */}
       <nav className="p-6 flex justify-between items-center border-b border-white/10 bg-neutral-950/50 backdrop-blur-md sticky top-0 z-50">
         <Link to="/" className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors">
@@ -134,120 +75,21 @@ export default function MagazineViewer() {
           <p className="text-xs text-neutral-500 uppercase tracking-widest">Vol. 1, No. 5</p>
         </div>
         <div className="flex items-center gap-4">
-          {!showDebugger && (
-            <div className="hidden md:flex items-center gap-2 text-[10px] text-brand font-bold animate-pulse">
-              <span>Images not loading?</span>
-              <ArrowRight className="w-3 h-3" />
-            </div>
-          )}
           <button 
-            onClick={() => setShowDebugger(!showDebugger)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all shadow-lg ${showDebugger ? 'bg-brand text-white scale-105' : 'bg-white text-black hover:bg-neutral-200'}`}
-            title="Debug Image Path"
+            onClick={() => setShowGrid(!showGrid)}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all shadow-lg ${showGrid ? 'bg-brand text-white' : 'bg-white text-black hover:bg-neutral-200'}`}
+            title={showGrid ? "Close Overview" : "View All Pages"}
           >
-            <Maximize2 className="w-4 h-4 rotate-45" />
-            <span className="text-[11px] font-black uppercase tracking-tighter">Fix Images / Debug</span>
-          </button>
-          <button 
-            onClick={() => setIsFullScreen(!isFullScreen)}
-            className="p-2 text-neutral-400 hover:text-white transition-colors"
-          >
-            {isFullScreen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
+            {showGrid ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+            <span className="text-[11px] font-black uppercase tracking-tighter">
+              {showGrid ? "Close Overview" : "View All Pages"}
+            </span>
           </button>
         </div>
       </nav>
 
-      {/* Debugger Panel */}
-      {showDebugger && (
-        <div className="bg-neutral-900 border-b border-white/10 p-6 animate-in slide-in-from-top duration-300">
-          <div className="max-w-4xl mx-auto">
-            <h3 className="text-sm font-bold mb-4 flex items-center gap-2">
-              <span className="w-2 h-2 bg-brand rounded-full animate-pulse" />
-              Image Path Debugger
-            </h3>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-[10px] uppercase tracking-widest text-neutral-500 mb-2">Base Folder URL</label>
-                <div className="flex gap-2">
-                  <input 
-                    type="text" 
-                    value={baseUrl}
-                    onChange={(e) => handleBaseUrlChange(e.target.value)}
-                    className="flex-1 bg-black border border-white/10 rounded px-4 py-2 text-sm font-mono focus:border-brand outline-none transition-colors"
-                    placeholder="https://raw.githubusercontent.com/..."
-                  />
-                  <button 
-                    onClick={() => handleBaseUrlChange(DEFAULT_BASE_URL)}
-                    className="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 rounded text-xs transition-colors"
-                  >
-                    Reset
-                  </button>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-black/40 p-4 rounded border border-white/5">
-                  <p className="text-[10px] text-neutral-500 mb-2 uppercase">Common Fixes</p>
-                  <div className="flex flex-wrap gap-2">
-                    <button 
-                      onClick={() => handleBaseUrlChange(DEFAULT_BASE_URL)}
-                      className="text-[10px] bg-green-600 text-white px-3 py-1 rounded font-bold hover:bg-green-700 transition-colors"
-                    >
-                      Reset to Recommended Path
-                    </button>
-                    <button 
-                      onClick={tryDiscovery}
-                      className="text-[10px] bg-brand text-white px-3 py-1 rounded font-bold hover:bg-brand-dark transition-colors"
-                    >
-                      Run Auto-Discovery
-                    </button>
-                    <button 
-                      onClick={() => handleBaseUrlChange(baseUrl.replace('/main/', '/master/'))}
-                      className="text-[10px] bg-neutral-800 hover:bg-neutral-700 px-3 py-1 rounded"
-                    >
-                      Try 'master' branch
-                    </button>
-                    <button 
-                      onClick={() => handleBaseUrlChange(baseUrl.replace('/Untitled/', '/'))}
-                      className="text-[10px] bg-neutral-800 hover:bg-neutral-700 px-3 py-1 rounded"
-                    >
-                      Remove 'Untitled'
-                    </button>
-                    <button 
-                      onClick={() => handleBaseUrlChange(baseUrl.replace('/images/', '/'))}
-                      className="text-[10px] bg-neutral-800 hover:bg-neutral-700 px-3 py-1 rounded"
-                    >
-                      Remove 'images'
-                    </button>
-                  </div>
-                </div>
-                <div className="bg-black/40 p-4 rounded border border-white/5">
-                  <p className="text-[10px] text-neutral-500 mb-2 uppercase">Manual URL Learning</p>
-                  <p className="text-[10px] text-neutral-400 mb-3">Paste the URL of any single page from GitHub:</p>
-                  <input 
-                    type="text" 
-                    placeholder="Paste full URL to Page 01 here..."
-                    className="w-full bg-black border border-white/10 rounded px-3 py-1.5 text-xs font-mono mb-2 focus:border-brand outline-none"
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') handleManualUrl(e.currentTarget.value);
-                    }}
-                  />
-                  <p className="text-[9px] text-neutral-600 italic">Example: https://raw.githubusercontent.com/.../Page_01.png</p>
-                </div>
-                <div className="bg-black/40 p-4 rounded border border-white/5">
-                  <p className="text-[10px] text-red-500 mb-2 uppercase font-bold">⚠️ Private Repository?</p>
-                  <p className="text-[10px] text-neutral-400 leading-relaxed">
-                    If your GitHub repository is <strong>Private</strong>, images will never load here. 
-                    Go to GitHub Settings → General → Danger Zone → <strong>Change visibility to Public</strong>.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Viewer Area */}
-      <div className={`flex flex-col items-center justify-center p-4 md:p-12 ${isFullScreen ? 'h-[calc(100vh-80px)]' : 'min-h-[80vh]'}`}>
+      <div className={`flex flex-col items-center justify-center p-4 md:p-12 ${showGrid ? 'h-[calc(100vh-80px)] opacity-20 pointer-events-none blur-sm' : 'min-h-[80vh]'}`}>
         <div className="relative max-w-4xl w-full aspect-[3/4] bg-neutral-900 rounded-lg shadow-2xl overflow-hidden border border-white/5">
           <AnimatePresence mode="wait">
             <motion.div
@@ -327,35 +169,61 @@ export default function MagazineViewer() {
         </div>
       </div>
 
-      {/* Thumbnails */}
-      {!isFullScreen && (
-        <div className="max-w-6xl mx-auto px-6 pb-24">
-          <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 mb-8">Page Overview</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-            {pages.map((page, idx) => (
-              <button
-                key={page.id}
-                onClick={() => setCurrentPage(idx)}
-                className={`aspect-[3/4] rounded-lg overflow-hidden border-2 transition-all ${currentPage === idx ? 'border-brand scale-105 shadow-lg shadow-brand/20' : 'border-transparent opacity-50 hover:opacity-100'}`}
-              >
-                <div className="w-full h-full bg-neutral-800 flex items-center justify-center">
-                  {imageError[idx] ? (
-                    <span className="text-[8px] text-neutral-600">404</span>
-                  ) : (
-                    <img 
-                      src={page.image} 
-                      alt={page.title} 
-                      className="w-full h-full object-cover" 
-                      referrerPolicy="no-referrer"
-                      onError={() => handleImageError(idx)}
-                    />
-                  )}
+      {/* Thumbnails Overlay */}
+      <AnimatePresence>
+        {showGrid && (
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className="fixed inset-0 z-40 bg-neutral-950/95 backdrop-blur-xl pt-24 pb-12 px-6 overflow-y-auto"
+          >
+            <div className="max-w-6xl mx-auto">
+              <div className="flex justify-between items-end mb-12">
+                <div>
+                  <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-500 mb-2">Page Overview</h3>
+                  <h2 className="text-3xl font-bold">All 24 Pages</h2>
                 </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
+                <button 
+                  onClick={() => setShowGrid(false)}
+                  className="px-6 py-2 bg-white text-black rounded-full font-bold text-sm hover:bg-neutral-200 transition-colors"
+                >
+                  Back to Reader
+                </button>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                {pages.map((page, idx) => (
+                  <button
+                    key={page.id}
+                    onClick={() => {
+                      setCurrentPage(idx);
+                      setShowGrid(false);
+                    }}
+                    className={`group relative aspect-[3/4] rounded-lg overflow-hidden border-2 transition-all duration-500 ${currentPage === idx ? 'border-brand scale-105 shadow-2xl shadow-brand/40' : 'border-white/10 opacity-60 hover:opacity-100 hover:border-white/30'}`}
+                  >
+                    <div className="w-full h-full bg-neutral-900 flex items-center justify-center">
+                      {imageError[idx] ? (
+                        <span className="text-[10px] text-neutral-600 font-mono">404</span>
+                      ) : (
+                        <img 
+                          src={page.image} 
+                          alt={page.title} 
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                          referrerPolicy="no-referrer"
+                          onError={() => handleImageError(idx)}
+                        />
+                      )}
+                    </div>
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <span className="text-xs font-bold uppercase tracking-widest">View Page {idx + 1}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
