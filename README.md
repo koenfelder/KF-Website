@@ -1,6 +1,13 @@
-# Nexus CRM & Portfolio Project
+# Koen Felder - Full Stack Web Developer Portfolio
 
-This project was built in AI Studio and is now ready for local development in VS Code.
+Welcome to my professional portfolio. This project showcases a blend of logic-driven web development and creative editorial design.
+
+## Featured Projects
+
+- **Nexus CRM**: A streamlined client management system for modern creative agencies, featuring a strategic dashboard and analytics.
+- **README Generator**: A specialized tool for developers to generate and preview polished GitHub profile READMEs.
+- **SkinWalker Society Magazine**: An interactive digital viewer for a 24-page subculture magazine exploring cryptozoology and Navajo folklore.
+- **TechNova**: A high-end retail electronics e-commerce experience focused on luxury and performance.
 
 ## Local Setup Instructions
 
