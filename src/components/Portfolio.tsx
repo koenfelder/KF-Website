@@ -42,7 +42,7 @@ export default function Portfolio() {
   };
 
   const technovaImage = "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800";
-  const headshotImage = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800";
+  const headshotImage = "/Images/Headshot.jpg";
 
   const projects = [
     {
