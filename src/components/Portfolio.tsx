@@ -182,7 +182,7 @@ export default function Portfolio() {
               <div className="relative group mx-auto max-w-[280px] md:max-w-none">
                 <div className="absolute -inset-4 bg-brand/5 rounded-[2.5rem] blur-2xl group-hover:bg-brand/10 transition-all duration-500"></div>
                 <img 
-                  src="/images/Headshot.jpg" 
+                  src="/input_file_0.png" 
                   alt="Koen Felder" 
                   className="relative w-full aspect-[4/5] object-cover rounded-3xl shadow-2xl border-4 border-white ring-1 ring-neutral-100"
                   referrerPolicy="no-referrer"
