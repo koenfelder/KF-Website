@@ -11,7 +11,8 @@ import Logo from './Logo';
 
 export default function Portfolio() {
   const magazineBaseUrl = "https://raw.githubusercontent.com/koenfelder/KF-Website/main/images/";
-  const magazineCover = `${magazineBaseUrl}${encodeURIComponent("SCM Final Version _Page_01.png")}`;
+  // Using a guessed filename for the mockup provided by the user
+  const magazineCover = `${magazineBaseUrl}${encodeURIComponent("SCM Final Version _Mockup.png")}`;
 
   const projects = [
     {
@@ -39,11 +40,11 @@ export default function Portfolio() {
     },
     {
       title: "SkinWalker Society Vol. 1, No. 5",
-      description: "A collaborative subculture magazine exploring cryptozoology and the history of Skinwalkers.",
+      description: "A collaborative editorial project exploring cryptozoology and Navajo legends. Features interviews, cultural analysis, and field research.",
       link: "/magazine",
       isInternal: true,
       image: magazineCover,
-      tags: ["Editorial Design", "Digital Publishing", "Collaboration"]
+      tags: ["Editorial", "Digital Publishing", "UX/UI Mockup"]
     }
   ];
 
@@ -169,9 +170,27 @@ export default function Portfolio() {
 
         {/* About Section */}
         <section id="about" className="mt-32 py-24 border-t border-neutral-100">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 items-start">
             <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400">About</h2>
-            <div className="md:col-span-2 space-y-6 text-lg text-neutral-600 leading-relaxed">
+            
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="md:col-span-1"
+            >
+              <div className="relative group mx-auto max-w-[280px] md:max-w-none">
+                <div className="absolute -inset-4 bg-brand/5 rounded-[2.5rem] blur-2xl group-hover:bg-brand/10 transition-all duration-500"></div>
+                <img 
+                  src="/images/Headshot.jpg" 
+                  alt="Koen Felder" 
+                  className="relative w-full aspect-[4/5] object-cover rounded-3xl shadow-2xl border-4 border-white ring-1 ring-neutral-100"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+            </motion.div>
+
+            <div className="md:col-span-2 space-y-6 text-lg text-neutral-600 leading-relaxed pt-2">
               <p>
                 I'm a developer who loves the intersection of design and engineering. 
                 I believe that the best products are built with a deep understanding of 
