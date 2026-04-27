@@ -6,7 +6,6 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Portfolio from './components/Portfolio';
-import ReadmeGenerator from './components/ReadmeGenerator';
 import NexusCRM from './components/NexusCRM';
 import MagazineViewer from './components/MagazineViewer';
 import ScrollToTop from './components/ScrollToTop';
@@ -49,6 +48,8 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boole
   }
 }
 
+import TechNovaPreview from './components/TechNovaPreview';
+
 export default function App() {
   return (
     <ErrorBoundary>
@@ -56,9 +57,9 @@ export default function App() {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Portfolio />} />
-          <Route path="/readme" element={<ReadmeGenerator />} />
           <Route path="/nexus" element={<NexusCRM />} />
           <Route path="/magazine" element={<MagazineViewer />} />
+          <Route path="/technova" element={<TechNovaPreview />} />
         </Routes>
       </Router>
     </ErrorBoundary>

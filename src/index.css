@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 @theme {
   --color-brand: #C4996B;
   --color-brand-light: #D4B491;

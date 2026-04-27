@@ -1,5 +1,6 @@
 {
-  "name": "Nexus CRM & Portfolio",
-  "description": "A professional portfolio featuring a strategic Nexus CRM dashboard, a GitHub README generator, and the SkinWalker Society magazine.",
-  "requestFramePermissions": []
+  "name": "Kf Website",
+  "description": "A professional portfolio webpage",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
 }

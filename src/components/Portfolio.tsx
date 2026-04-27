@@ -5,28 +5,49 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Github, Linkedin, Mail, Phone, ExternalLink, ArrowRight } from 'lucide-react';
+import { Github, Linkedin, Mail, Phone, ExternalLink, ArrowRight, Instagram, Copy, Check, Menu, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import Logo from './Logo';
 
 export default function Portfolio() {
+  const [copiedType, setCopiedType] = React.useState<'email' | 'phone' | null>(null);
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const magazineBaseUrl = "/images/";
   const magazineCover = `${magazineBaseUrl}${encodeURIComponent("Skinwalker Society Mockup.png")}`;
 
+  const copyToClipboard = (text: string, type: 'email' | 'phone') => {
+    navigator.clipboard.writeText(text);
+    setCopiedType(type);
+    setTimeout(() => setCopiedType(null), 2000);
+  };
+
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    setIsMenuOpen(false);
+  };
+
+  const triggerEmail = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    window.location.href = 'mailto:' + 'koen' + 'felder' + '@' + 'gmail' + '.com';
+  };
+
+  const triggerSms = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    window.location.href = 'sms:' + '602' + '796' + '6240';
+  };
+
   const projects = [
-    {
-      title: "README Generator",
-      description: "A tool to generate and preview polished GitHub profile READMEs.",
-      link: "/readme",
-      isInternal: true,
-      image: "https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?auto=format&fit=crop&q=80&w=800",
-      tags: ["React", "Tailwind", "Markdown"]
-    },
     {
       title: "TechNova",
       description: "A high-end retail electronics website with a focus on luxury and performance.",
-      link: "https://koenfelder.github.io/TechNova-Website/",
-      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800",
+      link: "/technova",
+      isInternal: true,
+      image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800",
       tags: ["E-commerce", "UI/UX", "Responsive"]
     },
     {
@@ -50,30 +71,70 @@ export default function Portfolio() {
   return (
     <div className="min-h-screen bg-white text-neutral-900 font-sans selection:bg-brand selection:text-white">
       {/* Navigation */}
-      <nav className="max-w-4xl mx-auto px-6 py-12 flex justify-between items-center">
-        <Link to="/" className="group">
-          <Logo className="w-10 h-10 transition-transform group-hover:scale-110" />
-        </Link>
-        <div className="flex gap-8 text-sm font-medium text-neutral-500">
-          <a href="#work" className="hover:text-brand transition-colors">Work</a>
-          <a href="#about" className="hover:text-brand transition-colors">About</a>
-          <a href="#contact" className="hover:text-brand transition-colors">Contact</a>
-          <Link to="/readme" className="text-brand hover:text-brand-dark font-semibold">README Tool</Link>
-        </div>
-      </nav>
+      <div className="sticky top-0 z-[100] bg-white/80 backdrop-blur-md border-b border-neutral-50/50">
+        <nav className="max-w-screen-2xl mx-auto px-6 py-6 flex justify-between items-center relative">
+          <Link to="/" className="group" onClick={() => setIsMenuOpen(false)}>
+            <Logo className="w-10 h-10 transition-transform group-hover:scale-110" />
+          </Link>
+          
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex gap-8 text-sm font-medium text-neutral-500">
+            <a href="#work" onClick={(e) => scrollToSection(e, 'work')} className="hover:text-brand transition-colors">Work</a>
+            <a href="#about" onClick={(e) => scrollToSection(e, 'about')} className="hover:text-brand transition-colors">About</a>
+            <a href="#contact" onClick={(e) => scrollToSection(e, 'contact')} className="hover:text-brand transition-colors">Contact</a>
+          </div>
+  
+          {/* Mobile Hamburger Button */}
+          <button 
+            className="md:hidden text-neutral-950 p-2 hover:bg-neutral-100 rounded-xl transition-colors"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+  
+          {/* Mobile Navigation Overlay */}
+          <AnimatePresence>
+            {isMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.2 }}
+                className="absolute top-full left-6 right-6 mt-4 bg-white border border-neutral-100 shadow-2xl rounded-3xl p-8 flex flex-col gap-6 md:hidden z-[100]"
+              >
+                {[
+                  { name: 'Work', id: 'work' },
+                  { name: 'About', id: 'about' },
+                  { name: 'Contact', id: 'contact' }
+                ].map((link) => (
+                  <a 
+                    key={link.name} 
+                    href={`#${link.id}`}
+                    onClick={(e) => scrollToSection(e, link.id)}
+                    className="text-2xl font-bold text-neutral-900 active:text-brand transition-colors"
+                  >
+                    {link.name}
+                  </a>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </nav>
+      </div>
 
       {/* Hero Section */}
-      <main className="max-w-4xl mx-auto px-6 pt-12 pb-24">
+      <main className="max-w-screen-2xl mx-auto px-6 pt-12 pb-24">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] mb-8">
+          <h1 className="text-5xl md:text-8xl font-extrabold tracking-tight leading-[1.1] mb-8">
             Hi there, I'm Koen Felder. <br />
             <span className="text-brand">Full Stack Web Developer.</span>
           </h1>
-          <p className="text-xl md:text-2xl text-neutral-600 max-w-2xl leading-relaxed mb-12">
+          <p className="text-xl md:text-2xl text-neutral-600 max-w-3xl leading-relaxed mb-12">
             I blend logic with strategy to build intuitive, scalable web experiences. 
             Currently focused on creating tools that empower developers and users alike.
           </p>
@@ -92,12 +153,15 @@ export default function Portfolio() {
               <a href="https://www.linkedin.com/in/koen-felder-59682829a" className="text-neutral-400 hover:text-brand transition-colors">
                 <Linkedin className="w-6 h-6" />
               </a>
+              <a href="https://www.instagram.com/kdubjr/" className="text-neutral-400 hover:text-brand transition-colors">
+                <Instagram className="w-6 h-6" />
+              </a>
             </div>
           </div>
         </motion.div>
 
         {/* Work Section */}
-        <section id="work" className="mt-32">
+        <section id="work" className="mt-32 scroll-mt-24">
           <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400 mb-12">Selected Work</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {projects.map((project, index) => (
@@ -168,7 +232,7 @@ export default function Portfolio() {
         </section>
 
         {/* About Section */}
-        <section id="about" className="mt-32 py-24 border-t border-neutral-100">
+        <section id="about" className="mt-32 py-24 border-t border-neutral-100 scroll-mt-24">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 items-start">
             <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400">About</h2>
             
@@ -188,7 +252,7 @@ export default function Portfolio() {
                 />
               </div>
             </motion.div>
-
+ 
             <div className="md:col-span-2 space-y-6 text-lg text-neutral-600 leading-relaxed pt-2">
               <p>
                 I'm a developer who loves the intersection of design and engineering. 
@@ -203,34 +267,148 @@ export default function Portfolio() {
             </div>
           </div>
         </section>
-
+ 
         {/* Contact Section */}
-        <section id="contact" className="mt-32 py-24 bg-brand rounded-[2rem] text-white px-8 md:px-16 overflow-hidden relative">
+        <section id="contact" className="mt-32 py-24 bg-neutral-950 rounded-[3rem] text-white px-8 md:px-20 overflow-hidden relative border border-white/5 scroll-mt-24">
+          {/* Decorative Elements */}
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand/20 rounded-full blur-[120px] -mr-64 -mt-64 animate-pulse"></div>
+          <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-brand/10 rounded-full blur-[80px] -ml-32 -mb-32"></div>
+          
           <div className="relative z-10">
-            <h2 className="text-4xl md:text-6xl font-bold mb-12 tracking-tight">Let's build something <br />together.</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              <div className="space-y-4">
-                <p className="text-white/60 text-sm uppercase tracking-widest">Contact Details</p>
-                <a href="mailto:koenfelder@gmail.com" className="block text-xl hover:text-white/80 transition-colors">koenfelder@gmail.com</a>
-                <a href="tel:6027966240" className="block text-xl hover:text-white/80 transition-colors">602-796-6240</a>
-              </div>
-              <div className="space-y-4">
-                <p className="text-white/60 text-sm uppercase tracking-widest">Socials</p>
-                <div className="flex gap-6">
-                  <a href="https://www.linkedin.com/in/koen-felder-59682829a" className="text-xl hover:text-white/80 transition-colors">LinkedIn</a>
-                  <a href="https://github.com/koenfelder" className="text-xl hover:text-white/80 transition-colors">GitHub</a>
+            <div className="max-w-3xl mb-20">
+              <motion.h2 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-5xl md:text-8xl font-bold mb-8 tracking-tight leading-[1.05]"
+              >
+                Let's bring your <br />
+                <span className="text-brand">next big idea</span> <br />
+                to life.
+              </motion.h2>
+              <p className="text-neutral-400 text-xl md:text-2xl leading-relaxed">
+                Whether you're looking to build a complex web platform or a high-converting landing page, 
+                I'm here to help you strategize and execute.
+              </p>
+            </div>
+
+            {/* Contact Form */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="max-w-4xl mb-32"
+            >
+              <form className="grid grid-cols-1 md:grid-cols-2 gap-8" onSubmit={(e) => e.preventDefault()}>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-widest text-white/40 ml-4">Full Name</label>
+                  <input 
+                    type="text" 
+                    placeholder="John Doe"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-brand/50 focus:bg-white/10 transition-all placeholder:text-white/20"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-widest text-white/40 ml-4">Email Address</label>
+                  <input 
+                    type="email" 
+                    placeholder="john@example.com"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-brand/50 focus:bg-white/10 transition-all placeholder:text-white/20"
+                  />
+                </div>
+                <div className="md:col-span-2 space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-widest text-white/40 ml-4">Subject</label>
+                  <input 
+                    type="text" 
+                    placeholder="How can I help you?"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-brand/50 focus:bg-white/10 transition-all placeholder:text-white/20"
+                  />
+                </div>
+                <div className="md:col-span-2 space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-widest text-white/40 ml-4">Message</label>
+                  <textarea 
+                    rows={5}
+                    placeholder="Tell me about your project..."
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-brand/50 focus:bg-white/10 transition-all placeholder:text-white/20 resize-none"
+                  ></textarea>
+                </div>
+                <div className="md:col-span-2">
+                  <button className="w-full md:w-auto px-12 py-5 bg-brand text-white rounded-2xl font-bold hover:bg-brand-dark transition-all active:scale-95 shadow-xl shadow-brand/20 flex items-center justify-center gap-3 group">
+                    Send Message 
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+
+            {/* Info Footer */}
+            <div className="pt-20 border-t border-white/10">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+                <div className="space-y-10">
+                  <p className="text-white/40 text-xs font-bold uppercase tracking-[0.2em]">Contact Information</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {/* Email Card */}
+                    <button 
+                      onClick={triggerEmail}
+                      className="group flex flex-col items-center justify-center gap-4 bg-white/5 hover:bg-white/10 transition-all p-8 rounded-3xl border border-white/5 w-full text-center active:scale-95 cursor-pointer"
+                    >
+                      <div className="w-16 h-16 rounded-2xl bg-brand/10 flex items-center justify-center text-brand group-hover:bg-brand group-hover:text-white transition-all transform group-hover:rotate-6">
+                        <Mail className="w-8 h-8" />
+                      </div>
+                      <div>
+                        <p className="text-lg font-bold mb-1">Email Me</p>
+                        <p className="text-xs text-white/40 group-hover:text-white/60 transition-colors">Direct message</p>
+                      </div>
+                    </button>
+
+                    {/* Phone Card */}
+                    <button 
+                      onClick={triggerSms}
+                      className="group flex flex-col items-center justify-center gap-4 bg-white/5 hover:bg-white/10 transition-all p-8 rounded-3xl border border-white/5 w-full text-center active:scale-95 cursor-pointer"
+                    >
+                      <div className="w-16 h-16 rounded-2xl bg-brand/10 flex items-center justify-center text-brand group-hover:bg-brand group-hover:text-white transition-all transform group-hover:-rotate-6">
+                        <Phone className="w-8 h-8" />
+                      </div>
+                      <div>
+                        <p className="text-lg font-bold mb-1">Text Me</p>
+                        <p className="text-xs text-white/40 group-hover:text-white/60 transition-colors">SMS / Mobile</p>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-10">
+                  <p className="text-white/40 text-xs font-bold uppercase tracking-[0.2em]">Connect</p>
+                  <div className="flex flex-wrap gap-x-12 gap-y-6">
+                    {[
+                      { name: 'Instagram', url: 'https://www.instagram.com/kdubjr/', icon: Instagram },
+                      { name: 'LinkedIn', url: 'https://www.linkedin.com/in/koen-felder-59682829a', icon: Linkedin },
+                      { name: 'GitHub', url: 'https://github.com/koenfelder', icon: Github },
+                    ].map((social) => (
+                      <a 
+                        key={social.name}
+                        href={social.url} 
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 text-lg font-medium hover:text-brand transition-colors relative group py-2"
+                      >
+                        <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-brand/10 transition-colors">
+                          <social.icon className="w-5 h-5" />
+                        </div>
+                        {social.name}
+                        <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand transition-all group-hover:w-full"></span>
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          {/* Subtle background decoration */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -mr-48 -mt-48"></div>
         </section>
       </main>
 
-      <footer className="max-w-4xl mx-auto px-6 py-12 text-neutral-400 text-sm flex justify-between items-center border-t border-neutral-50">
+      <footer className="max-w-screen-2xl mx-auto px-6 py-12 text-neutral-400 text-sm flex justify-between items-center border-t border-neutral-50">
         <p>© 2026 Koen Felder</p>
-        <p>Built with logic & strategy</p>
       </footer>
     </div>
   );
