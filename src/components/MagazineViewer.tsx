@@ -8,8 +8,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ChevronLeft, ChevronRight, Maximize2, Minimize2, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-// The images are located in the 'images' folder within the repository
-const BASE_URL = "https://raw.githubusercontent.com/koenfelder/KF-Website/main/images/";
+// The images are located in the 'images' folder
+const BASE_URL = "/images/";
 
 const metadata: Record<number, { title: string; description: string }> = {
   1: { title: "Cover", description: "SkinWalker Society Volume 1, Issue No. 5 - All About Skinwalkers!" },
