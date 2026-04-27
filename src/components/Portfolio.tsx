@@ -47,7 +47,7 @@ export default function Portfolio() {
       description: "A high-end retail electronics website with a focus on luxury and performance.",
       link: "/technova",
       isInternal: true,
-      image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800",
+      image: "/images/Technova%20Mockup.png",
       tags: ["E-commerce", "UI/UX", "Responsive"]
     },
     {
