@@ -13,8 +13,8 @@ import Logo from './Logo';
 export default function Portfolio() {
   const [copiedType, setCopiedType] = React.useState<'email' | 'phone' | null>(null);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const magazineBaseUrl = "/images/";
-  const magazineCover = `${magazineBaseUrl}${encodeURIComponent("Skinwalker Society Mockup.png")}`;
+  const magazineBaseUrl = "/Images/";
+  const magazineCover = `${magazineBaseUrl}${encodeURIComponent("SCM Final Version _Page_01.png")}`;
 
   const copyToClipboard = (text: string, type: 'email' | 'phone') => {
     navigator.clipboard.writeText(text);
@@ -41,8 +41,8 @@ export default function Portfolio() {
     window.location.href = 'sms:' + '602' + '796' + '6240';
   };
 
-  const technovaImage = `/images/${encodeURIComponent("Technova Mockup.png")}`;
-  const headshotImage = `/images/Headshot.jpg`;
+  const technovaImage = "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800";
+  const headshotImage = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800";
 
   const projects = [
     {
@@ -133,7 +133,7 @@ export default function Portfolio() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-5xl md:text-8xl font-extrabold tracking-tight leading-[1.1] mb-8">
+          <h1 className="text-5xl md:text-8xl font-display font-extrabold tracking-tight leading-[1.1] mb-8">
             Hi there, I'm Koen Felder. <br />
             <span className="text-brand">Full Stack Web Developer.</span>
           </h1>
@@ -282,7 +282,7 @@ export default function Portfolio() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-5xl md:text-8xl font-bold mb-8 tracking-tight leading-[1.05]"
+                className="text-5xl md:text-8xl font-display font-bold mb-8 tracking-tight leading-[1.05]"
               >
                 Let's bring your <br />
                 <span className="text-brand">next big idea</span> <br />
