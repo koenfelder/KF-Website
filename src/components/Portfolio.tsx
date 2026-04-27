@@ -41,13 +41,16 @@ export default function Portfolio() {
     window.location.href = 'sms:' + '602' + '796' + '6240';
   };
 
+  const technovaImage = `/images/${encodeURIComponent("Technova Mockup.png")}`;
+  const headshotImage = `/images/Headshot.jpg`;
+
   const projects = [
     {
       title: "TechNova",
       description: "A high-end retail electronics website with a focus on luxury and performance.",
       link: "/technova",
       isInternal: true,
-      image: "/images/Technova%20Mockup.png",
+      image: technovaImage,
       tags: ["E-commerce", "UI/UX", "Responsive"]
     },
     {
@@ -245,7 +248,7 @@ export default function Portfolio() {
               <div className="relative group mx-auto max-w-[280px] md:max-w-none">
                 <div className="absolute -inset-4 bg-brand/5 rounded-[2.5rem] blur-2xl group-hover:bg-brand/10 transition-all duration-500"></div>
                 <img 
-                  src="/images/Headshot.jpg" 
+                  src={headshotImage} 
                   alt="Koen Felder" 
                   className="relative w-full aspect-[4/5] object-cover rounded-3xl shadow-2xl border-4 border-white ring-1 ring-neutral-100"
                   referrerPolicy="no-referrer"
@@ -255,12 +258,11 @@ export default function Portfolio() {
  
             <div className="md:col-span-2 space-y-6 text-lg text-neutral-600 leading-relaxed pt-2">
               <p>
-                I'm a developer who loves the intersection of design and engineering. 
-                I believe that the best products are built with a deep understanding of 
-                both the user's needs and the underlying technology.
+                Hi my name is Koen Felder, I&apos;m a full-stack developer based in Phoenix, Arizona who loves the intersection of design and engineering. 
+                I believe that the best products are built with a deep understanding of both the user&apos;s needs and the underlying technology.
               </p>
               <p>
-                When I'm not coding, I'm likely exploring new tech trends, 
+                When I&apos;m not coding, I&apos;m likely researching new tech trends, 
                 strategizing my next build, or finding ways to make the web a 
                 more intuitive place for everyone.
               </p>

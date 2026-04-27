@@ -8,8 +8,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ChevronLeft, ChevronRight, Maximize2, Minimize2, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-// The images are located in the 'images' folder
-const BASE_URL = "/images/";
+// The images are located in the 'Images' folder
+const BASE_URL = "/Images/";
 
 const metadata: Record<number, { title: string; description: string }> = {
   1: { title: "Cover", description: "SkinWalker Society Volume 1, Issue No. 5 - All About Skinwalkers!" },
