@@ -24,6 +24,18 @@ const metadata: Record<number, { title: string; description: string }> = {
   10: { title: "The Skinwalker Hoax", description: "The true story behind the 'Sound Only' hoax of 2021." },
   11: { title: "The Cost of Misrepresentation", description: "How virality and hoaxes impact Indigenous cultures and cryptozoology." },
   12: { title: "Fact Check with Erik Bard", description: "An exclusive interview with Erik Bard on searching for Skinwalkers and combatting hoaxes." },
+  13: { title: "The Future of Cryptozoology", description: "Advancing the field through scientific rigor and cultural sensitivity." },
+  14: { title: "Field Reports", description: "Recent sightings and investigations documented by our community members." },
+  15: { title: "Cryptid Gear Guide", description: "Essential tools for any serious field investigator." },
+  16: { title: "Navajo Cultural Preservation", description: "The importance of protecting sacred stories and traditions." },
+  17: { title: "Global Context", description: "Comparing Skinwalker legends to shapeshifter myths around the world." },
+  18: { title: "The Psychology of Belief", description: "Why we are drawn to the unknown and the mysterious." },
+  19: { title: "Interview: Dr. Arlan Hall", description: "Discussing the sociological impact of urban legends." },
+  20: { title: "Advanced Tracking Techniques", description: "Methods for identifying anomalous activity in the desert." },
+  21: { title: "Community Spotlight", description: "Highlighting the work of independent researchers." },
+  22: { title: "Society Archives", description: "A look back at historical documents related to Navajo shapeshifters." },
+  23: { title: "Conclusion & Future Research", description: "Summarizing our findings and outlining goals for the next issue." },
+  24: { title: "Back Cover", description: "Skinwalker Society Volume 1, Issue No. 5 - Join the hunt." },
 };
 
 export default function MagazineViewer() {
