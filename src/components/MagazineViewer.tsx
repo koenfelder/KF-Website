@@ -188,7 +188,7 @@ export default function MagazineViewer() {
                       <img 
                         src={page.image} 
                         alt={page.title}
-                        className="w-full h-full object-cover transform-gpu"
+                        className="w-full h-full object-contain transform-gpu"
                         referrerPolicy="no-referrer"
                         onError={() => handleImageError(page.id)}
                       />
@@ -294,7 +294,7 @@ export default function MagazineViewer() {
                       <img 
                         src={page.image} 
                         alt={page.title} 
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                        className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105" 
                         referrerPolicy="no-referrer"
                         onError={() => handleImageError(page.id)}
                       />
