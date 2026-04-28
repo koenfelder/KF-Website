@@ -13,7 +13,7 @@ import Logo from './Logo';
 export default function Portfolio() {
   const [copiedType, setCopiedType] = React.useState<'email' | 'phone' | null>(null);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const magazineBaseUrl = "images/";
+  const magazineBaseUrl = `${import.meta.env.BASE_URL}images/`;
   const magazineCover = `${magazineBaseUrl}scm-page-01.png`;
 
   const copyToClipboard = (text: string, type: 'email' | 'phone') => {
@@ -41,9 +41,9 @@ export default function Portfolio() {
     window.location.href = 'sms:' + '602' + '796' + '6240';
   };
 
-  const technovaImage = "images/technova-mockup.png";
-  const skinwalkerMockup = "images/skinwalker-mockup.png";
-  const headshotImage = "images/headshot.jpg";
+  const technovaImage = `${import.meta.env.BASE_URL}images/technova-mockup.png`;
+  const skinwalkerMockup = `${import.meta.env.BASE_URL}images/skinwalker-mockup.png`;
+  const headshotImage = `${import.meta.env.BASE_URL}images/headshot.jpg`;
 
   const projects = [
     {
