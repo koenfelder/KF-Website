@@ -41,7 +41,8 @@ export default function Portfolio() {
     window.location.href = 'sms:' + '602' + '796' + '6240';
   };
 
-  const technovaImage = "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800";
+  const technovaImage = "/Images/Technova Mockup.png";
+  const skinwalkerMockup = "/Images/Skinwalker Society Mockup.png";
   const headshotImage = "/Images/Headshot.jpg";
 
   const projects = [
@@ -66,7 +67,7 @@ export default function Portfolio() {
       description: "A collaborative editorial project exploring cryptozoology and Navajo legends. Features interviews, cultural analysis, and field research.",
       link: "/magazine",
       isInternal: true,
-      image: magazineCover,
+      image: skinwalkerMockup,
       tags: ["Editorial", "Digital Publishing", "UX/UI Mockup"]
     }
   ];
