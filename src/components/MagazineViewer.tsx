@@ -8,8 +8,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ChevronLeft, ChevronRight, Maximize2, Minimize2, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-// The images are located in the 'Images' folder
-const BASE_URL = "/Images/";
+// The images are located in the 'images' folder
+const BASE_URL = "images/";
 
 const metadata: Record<number, { title: string; description: string }> = {
   1: { title: "Cover", description: "SkinWalker Society Volume 1, Issue No. 5 - All About Skinwalkers!" },
@@ -47,13 +47,12 @@ export default function MagazineViewer() {
   const pages = Array.from({ length: 24 }, (_, i) => {
     const pageNum = i + 1;
     const paddedPageNum = pageNum.toString().padStart(2, '0');
-    const fileName = `SCM Final Version _Page_${paddedPageNum}.png`;
-    const encodedFileName = encodeURIComponent(fileName);
+    const fileName = `scm-page-${paddedPageNum}.png`;
     
     return {
       id: pageNum,
       title: metadata[pageNum]?.title || `Page ${pageNum}`,
-      image: `${BASE_URL}${encodedFileName}`,
+      image: `${BASE_URL}${fileName}`,
       description: metadata[pageNum]?.description || `Continuing the exploration of the Skinwalker Society subculture.`
     };
   });
