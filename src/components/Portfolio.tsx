@@ -41,9 +41,9 @@ export default function Portfolio() {
     window.location.href = 'sms:' + '602' + '796' + '6240';
   };
 
-  const technovaImage = `${import.meta.env.BASE_URL}images/technova-mockup.png`;
-  const skinwalkerMockup = `${import.meta.env.BASE_URL}images/skinwalker-mockup.png`;
-  const headshotImage = `${import.meta.env.BASE_URL}images/headshot.jpg`;
+  const technovaImage = "https://drive.google.com/thumbnail?id=1kWNkbvI91Ha33zI6y_5RvE0Y_q5K3YQn&sz=w1200";
+  const skinwalkerMockup = "https://drive.google.com/thumbnail?id=13djgmvl-quGaxD7m3XIbxXFQzrwukT85&sz=w1200";
+  const headshotImage = "https://drive.google.com/thumbnail?id=1VJvphGTT9pSOl_jC1iVOtwP8HCfsqAsb&sz=w1200";
 
   const projects = [
     {
@@ -178,7 +178,7 @@ export default function Portfolio() {
                 className="group"
               >
                 {project.isInternal ? (
-                  <Link to={project.link} className="block">
+                  <div className="block">
                     <div className="aspect-video bg-neutral-100 rounded-2xl mb-6 overflow-hidden relative">
                       {project.image ? (
                         <img 
@@ -193,18 +193,20 @@ export default function Portfolio() {
                         </div>
                       )}
                     </div>
-                    <h3 className="text-2xl font-bold mb-2 flex items-center gap-2">
-                      {project.title} <ArrowRight className="w-5 h-5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                    </h3>
+                    <Link to={project.link}>
+                      <h3 className="text-2xl font-bold mb-2 flex items-center gap-2">
+                        {project.title} <ArrowRight className="w-5 h-5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                      </h3>
+                    </Link>
                     <p className="text-neutral-500 mb-4">{project.description}</p>
                     <div className="flex gap-2">
                       {project.tags.map(tag => (
                         <span key={tag} className="text-[10px] font-bold uppercase tracking-wider bg-neutral-100 px-2 py-1 rounded text-neutral-600">{tag}</span>
                       ))}
                     </div>
-                  </Link>
+                  </div>
                 ) : (
-                  <a href={project.link} className="block">
+                  <div className="block">
                     <div className="aspect-video bg-neutral-100 rounded-2xl mb-6 overflow-hidden relative">
                       {project.image ? (
                         <img 
@@ -219,16 +221,18 @@ export default function Portfolio() {
                         </div>
                       )}
                     </div>
-                    <h3 className="text-2xl font-bold mb-2 flex items-center gap-2">
-                      {project.title} <ArrowRight className="w-5 h-5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                    </h3>
+                    <a href={project.link}>
+                      <h3 className="text-2xl font-bold mb-2 flex items-center gap-2">
+                        {project.title} <ArrowRight className="w-5 h-5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                      </h3>
+                    </a>
                     <p className="text-neutral-500 mb-4">{project.description}</p>
                     <div className="flex gap-2">
                       {project.tags.map(tag => (
                         <span key={tag} className="text-[10px] font-bold uppercase tracking-wider bg-neutral-100 px-2 py-1 rounded text-neutral-600">{tag}</span>
                       ))}
                     </div>
-                  </a>
+                  </div>
                 )}
               </motion.div>
             ))}

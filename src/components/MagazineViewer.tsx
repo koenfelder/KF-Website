@@ -8,8 +8,33 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ChevronLeft, ChevronRight, Maximize2, Minimize2, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-// The images are located in the 'images' folder
-const BASE_URL = `${import.meta.env.BASE_URL}images/`;
+// Mapping of Google Drive File IDs for each page
+const DRIVE_IDS: Record<number, string> = {
+  1: "1OYuGhDjW1scZNwlegUH6ekoLSwugZbJM",
+  2: "133YNFRlfN4Shvemfbd1F1nUZkdCeEKwK",
+  3: "1outT8gJnm23dsPDk8jG77HA2eNHnN51X",
+  4: "1n5CIJjmpgpGJ0J9OxTrGDkIALDbwjth3",
+  5: "1Xipol3hovGQmJEyKoWYXLNDTeYsoEJhs",
+  6: "1TFg5rmVjLzQMcptmRAca4nV1dLFMlEg0",
+  7: "1W3xpIYp8GgxV2OMSfyOX61FXs0IWHeBA",
+  8: "1VhNzMen5wjOBqCXyO-sWhrBcKkYr-eDX",
+  9: "1wslazmWap1zUcuxJUPnEpu5AYSrg2JQK",
+  10: "1TUIRqnPnDZKqBq5c3CXpAmNHHxV4li2A",
+  11: "1SE6gYmXAMv4SzGlzM8g-tkOfnuNXAXK1",
+  12: "1melHNLMdJZtTJYLTSwjpPNYyRnr22rCJ",
+  13: "1fqVzZVpiqGwIp7MixGfzjTRS2TDyzpq3",
+  14: "16EpEJ_6GNTv1oP9x9G027Z6wiF7rGeQE",
+  15: "1D7QuQnSKz-U9b9tIo1Y4zFmYYa_VDmdE",
+  16: "1S0flJ3CUIR5eMG7xUKNHTdRj5JXVZDRO",
+  17: "1n1LvTYHBO_P4hBn8rAO5kMW6dB1nvOpe",
+  18: "1hQ0c5_YjwOCBBZptp4pmjXlvNei0CcVJ",
+  19: "1Q0HhkKlGsqeEAYR2unO_X0u-IA1rYkhp",
+  20: "18KoT9SspNw4PJprH2fwAC6QiCuX56enR",
+  21: "1sIDsWuwzSCatrhEKqDdXAAFXJeppBqCj",
+  22: "1EQ2g0JNjBm7ZkK0IruFmVMAQGtVbFmHd",
+  23: "1FQhj_mPznH1PYXGe4TF7a7FEMC5gSpwS",
+  24: "14x6h9Oo3dduwXJUJoFvk5ZoAjHFdu4BS",
+};
 
 const metadata: Record<number, { title: string; description: string }> = {
   1: { title: "Cover", description: "SkinWalker Society Volume 1, Issue No. 5 - All About Skinwalkers!" },
@@ -43,16 +68,17 @@ export default function MagazineViewer() {
   const [showGrid, setShowGrid] = useState(false);
   const [imageError, setImageError] = useState<Record<number, boolean>>({});
 
-  // Generate pages based on the hardcoded BASE_URL
+  // Generate pages based on Google Drive IDs
   const pages = Array.from({ length: 24 }, (_, i) => {
     const pageNum = i + 1;
-    const paddedPageNum = pageNum.toString().padStart(2, '0');
-    const fileName = `scm-page-${paddedPageNum}.png`;
+    const driveId = DRIVE_IDS[pageNum];
+    // sz=w2000 provides a high-quality thumbnail without the Drive UI
+    const imageUrl = `https://drive.google.com/thumbnail?id=${driveId}&sz=w2000`;
     
     return {
       id: pageNum,
       title: metadata[pageNum]?.title || `Page ${pageNum}`,
-      image: `${BASE_URL}${fileName}`,
+      image: imageUrl,
       description: metadata[pageNum]?.description || `Continuing the exploration of the Skinwalker Society subculture.`
     };
   });
