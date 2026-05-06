@@ -5,14 +5,126 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Github, Linkedin, Mail, Phone, ExternalLink, ArrowRight, Instagram, Copy, Check, Menu, X } from 'lucide-react';
+import { Github, Linkedin, Mail, Phone, ExternalLink, ArrowRight, Instagram, Copy, Check, Menu, X, BookOpen, Target, Layers, Rocket, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Logo from './Logo';
+import { CASE_STUDIES } from '../data/caseStudies';
+
+interface CaseStudyPanelProps {
+  isOpen: boolean;
+  onClose: () => void;
+  projectId: string;
+}
+
+function CaseStudyPanel({ isOpen, onClose, projectId }: CaseStudyPanelProps) {
+  const content = CASE_STUDIES[projectId];
+  if (!content) return null;
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-neutral-900/40 backdrop-blur-sm z-[200]"
+          />
+          <motion.div
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="fixed top-0 right-0 h-full w-full max-w-xl bg-white shadow-2xl z-[210] overflow-y-auto"
+          >
+            <div className="sticky top-0 bg-white/80 backdrop-blur-md px-8 py-6 border-b border-neutral-100 flex items-center justify-between z-10">
+              <h2 className="text-2xl font-bold text-neutral-900">Case Study</h2>
+              <button 
+                onClick={onClose}
+                className="p-2 hover:bg-neutral-100 rounded-full transition-colors"
+                aria-label="Close Case Study"
+              >
+                <X className="w-6 h-6 text-neutral-400" />
+              </button>
+            </div>
+
+            <div className="p-8 space-y-12 pb-20">
+              {/* Title Section */}
+              <section>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-brand mb-3 block">{content.subtitle}</span>
+                <h3 className="text-3xl font-bold text-neutral-900 leading-tight">
+                  {content.title}
+                </h3>
+                <p className="mt-4 text-neutral-500 leading-relaxed">
+                  {content.overview}
+                </p>
+              </section>
+
+              {/* Objective */}
+              <section className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${projectId === 'technova' ? 'bg-blue-50' : 'bg-orange-50'}`}>
+                    <Target className={`w-5 h-5 ${projectId === 'technova' ? 'text-blue-600' : 'text-orange-600'}`} />
+                  </div>
+                  <h4 className="text-xl font-bold text-neutral-900">Objective</h4>
+                </div>
+                <p className="text-neutral-600 leading-relaxed bg-neutral-50 p-6 rounded-2xl border border-neutral-100">
+                  {content.objective}
+                </p>
+              </section>
+
+              {/* Process */}
+              <section className="space-y-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center">
+                    <Layers className="w-5 h-5 text-purple-600" />
+                  </div>
+                  <h4 className="text-xl font-bold text-neutral-900">Process</h4>
+                </div>
+                <div className="grid gap-6">
+                  {content.process.map((step, idx) => (
+                    <div key={idx} className="flex gap-4">
+                      <div className="shrink-0 w-8 h-8 rounded-full bg-neutral-100 flex items-center justify-center text-sm font-bold text-neutral-900">{idx + 1}</div>
+                      <p className="text-neutral-600 leading-relaxed">{step}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              {/* Results */}
+              <section className="space-y-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center">
+                    <Rocket className="w-5 h-5 text-green-600" />
+                  </div>
+                  <h4 className="text-xl font-bold text-neutral-900">Results</h4>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {content.results.map((feature, idx) => (
+                    <div key={idx} className="flex items-center gap-3 p-4 bg-white border border-neutral-100 rounded-xl">
+                      <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
+                      <span className="text-sm font-medium text-neutral-700">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-sm text-neutral-500 italic mt-8 border-t border-neutral-100 pt-6">
+                  The project was successfully delivered within technical specifications while maintaining strict adherence to performance budgets and project timelines.
+                </p>
+              </section>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
 
 export default function Portfolio() {
   const [copiedType, setCopiedType] = React.useState<'email' | 'phone' | null>(null);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [activeCaseStudy, setActiveCaseStudy] = React.useState<string | null>(null);
   const magazineBaseUrl = `${import.meta.env.BASE_URL}images/`;
   const magazineCover = `${magazineBaseUrl}scm-page-01.png`;
 
@@ -42,32 +154,38 @@ export default function Portfolio() {
   };
 
   const technovaImage = "https://drive.google.com/thumbnail?id=1kWNkbvI91Ha33zI6y_5RvE0Y_q5K3YQn&sz=w1200";
+  const luminaImage = "https://drive.google.com/thumbnail?id=1PRtBNW7Bgtjr5__raRa0s0rrmR_f1r5P&sz=w1200";
   const skinwalkerMockup = "https://drive.google.com/thumbnail?id=13djgmvl-quGaxD7m3XIbxXFQzrwukT85&sz=w1200";
   const headshotImage = "https://drive.google.com/thumbnail?id=1VJvphGTT9pSOl_jC1iVOtwP8HCfsqAsb&sz=w1200";
 
   const projects = [
     {
+      id: "technova",
       title: "TechNova",
       description: "A high-end retail electronics website with a focus on luxury and performance.",
       link: "/technova",
       isInternal: true,
       image: technovaImage,
+      hasCaseStudy: true,
       tags: ["E-commerce", "UI/UX", "Responsive"]
     },
     {
-      title: "Nexus CRM",
-      description: "A streamlined client management system for modern creative agencies.",
-      link: "/nexus",
+      id: "lumina",
+      title: "Lumina Architects",
+      description: "A minimalist digital portfolio for a premier architectural firm focusing on sustainable and modern structures.",
+      link: "/lumina",
       isInternal: true,
-      image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800",
-      tags: ["React", "Firebase", "Analytics"]
+      image: luminaImage,
+      tags: ["Web Design", "Architecture", "Portfolio"]
     },
     {
+      id: "magazine",
       title: "SkinWalker Society Vol. 1, No. 5",
       description: "A collaborative editorial project exploring cryptozoology and Navajo legends. Features interviews, cultural analysis, and field research.",
       link: "/magazine",
       isInternal: true,
       image: skinwalkerMockup,
+      hasCaseStudy: true,
       tags: ["Editorial", "Digital Publishing", "UX/UI Mockup"]
     }
   ];
@@ -199,10 +317,21 @@ export default function Portfolio() {
                       </h3>
                     </Link>
                     <p className="text-neutral-500 mb-4">{project.description}</p>
-                    <div className="flex gap-2">
-                      {project.tags.map(tag => (
-                        <span key={tag} className="text-[10px] font-bold uppercase tracking-wider bg-neutral-100 px-2 py-1 rounded text-neutral-600">{tag}</span>
-                      ))}
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex flex-wrap gap-2">
+                        {project.tags.map(tag => (
+                          <span key={tag} className="text-[10px] font-bold uppercase tracking-wider bg-neutral-100 px-2 py-1 rounded text-neutral-600">{tag}</span>
+                        ))}
+                      </div>
+                      {project.hasCaseStudy && (
+                        <button 
+                          onClick={() => setActiveCaseStudy(project.id)}
+                          className="text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 text-brand hover:underline shrink-0"
+                        >
+                          <BookOpen className="w-3 h-3" />
+                          Case Study
+                        </button>
+                      )}
                     </div>
                   </div>
                 ) : (
@@ -227,10 +356,21 @@ export default function Portfolio() {
                       </h3>
                     </a>
                     <p className="text-neutral-500 mb-4">{project.description}</p>
-                    <div className="flex gap-2">
-                      {project.tags.map(tag => (
-                        <span key={tag} className="text-[10px] font-bold uppercase tracking-wider bg-neutral-100 px-2 py-1 rounded text-neutral-600">{tag}</span>
-                      ))}
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex gap-2">
+                        {project.tags.map(tag => (
+                          <span key={tag} className="text-[10px] font-bold uppercase tracking-wider bg-neutral-100 px-2 py-1 rounded text-neutral-600">{tag}</span>
+                        ))}
+                      </div>
+                      {project.hasCaseStudy && (
+                        <a 
+                          href={project.link} 
+                          className="text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 text-brand hover:underline"
+                        >
+                          <BookOpen className="w-3 h-3" />
+                          Case Study
+                        </a>
+                      )}
                     </div>
                   </div>
                 )}
@@ -417,6 +557,12 @@ export default function Portfolio() {
       <footer className="max-w-screen-2xl mx-auto px-6 py-12 text-neutral-400 text-sm flex justify-between items-center border-t border-neutral-50">
         <p>© 2026 Koen Felder</p>
       </footer>
+
+      <CaseStudyPanel 
+        isOpen={!!activeCaseStudy} 
+        onClose={() => setActiveCaseStudy(null)} 
+        projectId={activeCaseStudy || ''} 
+      />
     </div>
   );
 }

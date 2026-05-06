@@ -6,7 +6,7 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Portfolio from './components/Portfolio';
-import NexusCRM from './components/NexusCRM';
+import LuminaPreview from './components/LuminaPreview';
 import MagazineViewer from './components/MagazineViewer';
 import ScrollToTop from './components/ScrollToTop';
 
@@ -57,7 +57,7 @@ export default function App() {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Portfolio />} />
-          <Route path="/nexus" element={<NexusCRM />} />
+          <Route path="/lumina" element={<LuminaPreview />} />
           <Route path="/magazine" element={<MagazineViewer />} />
           <Route path="/technova" element={<TechNovaPreview />} />
         </Routes>
