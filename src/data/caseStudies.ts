@@ -53,7 +53,7 @@ export const CASE_STUDIES: Record<string, CaseStudyContent> = {
   },
   lumina: {
     title: "Lumina Architects: Single Page Architectural Experience",
-    subtitle: "Full Stack Frontend Development",
+    subtitle: "Full Stack Development",
     overview: "A high performance single page architectural portfolio designed to meet rigorous academic and professional technical standards, featuring advanced JavaScript integrations and semantic architecture.",
     objective: "The objective was to engineer a professional, standalone single page website that validates to industry standards. The project required the implementation of semantic HTML, error free CSS, and a specialized JavaScript suite including jQuery widgets, AJAX API integrations, Web Storage systems, and interactive slideshow components.",
     process: [

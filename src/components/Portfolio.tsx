@@ -156,7 +156,7 @@ export default function Portfolio() {
   const technovaImage = "https://drive.google.com/thumbnail?id=1kWNkbvI91Ha33zI6y_5RvE0Y_q5K3YQn&sz=w1200";
   const luminaImage = "https://drive.google.com/thumbnail?id=1PRtBNW7Bgtjr5__raRa0s0rrmR_f1r5P&sz=w1200";
   const skinwalkerMockup = "https://drive.google.com/thumbnail?id=13djgmvl-quGaxD7m3XIbxXFQzrwukT85&sz=w1200";
-  const headshotImage = "https://drive.google.com/thumbnail?id=1JkFUt_fslkJWRGNbd74Ji6yRHOViuaWP&sz=w1200";
+  const headshotImage = "https://drive.google.com/thumbnail?id=1VaLTM1SFWLRxHPWCnYmtl-XWgLcuqL-H&sz=w1200";
 
   const projects = [
     {
