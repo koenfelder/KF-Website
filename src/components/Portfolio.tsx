@@ -196,7 +196,17 @@ export default function Portfolio() {
       {/* Navigation */}
       <div className="sticky top-0 z-[100] bg-white/80 backdrop-blur-md border-b border-neutral-50/50">
         <nav className="max-w-screen-2xl mx-auto px-6 py-6 flex justify-between items-center relative">
-          <Link to="/" className="group" onClick={() => setIsMenuOpen(false)}>
+          <Link 
+            to="/" 
+            className="group" 
+            onClick={(e) => {
+              if (window.location.hash === '' || window.location.hash === '#/') {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+              setIsMenuOpen(false);
+            }}
+          >
             <Logo className="w-10 h-10 transition-transform group-hover:scale-110" />
           </Link>
           
