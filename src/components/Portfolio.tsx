@@ -176,6 +176,7 @@ export default function Portfolio() {
       link: "/lumina",
       isInternal: true,
       image: luminaImage,
+      hasCaseStudy: true,
       tags: ["Web Design", "Architecture", "Portfolio"]
     },
     {

@@ -50,5 +50,26 @@ export const CASE_STUDIES: Record<string, CaseStudyContent> = {
       "Navajo Folklore Documentation",
       "Cryptozoology Resource Guide"
     ]
+  },
+  lumina: {
+    title: "Lumina Architects: Single Page Architectural Experience",
+    subtitle: "Full Stack Frontend Development",
+    overview: "A high performance single page architectural portfolio designed to meet rigorous academic and professional technical standards, featuring advanced JavaScript integrations and semantic architecture.",
+    objective: "The objective was to engineer a professional, standalone single page website that validates to industry standards. The project required the implementation of semantic HTML, error free CSS, and a specialized JavaScript suite including jQuery widgets, AJAX API integrations, Web Storage systems, and interactive slideshow components.",
+    process: [
+      "I constructed the foundation using semantic HTML5 and validated CSS3, ensuring the layout remained optimized for a 1280px viewport while maintaining high accessibility standards.",
+      "I integrated a jQuery based UI framework to manage complex interactive components such as accordion style project details and dynamic tabbed navigation.",
+      "I engineered an asynchronous content pipeline using AJAX to fetch architectural project data from a custom JSON API, allowing for modular content updates without page reloads.",
+      "I implemented a persistent user experience layer using Web Storage to track visitor preferences and custom form data, ensuring state retention across sessions.",
+      "I developed a custom JavaScript carousel using a lightweight library to showcase high resolution architectural photography with smooth transition logic."
+    ],
+    results: [
+      "Single Page Portfolio Architecture",
+      "jQuery Accordion Integration",
+      "AJAX Powered Content Loading",
+      "localStorage Data Persistence",
+      "Dynamic Image Carousel",
+      "Validated HTML & CSS Suite"
+    ]
   }
 };

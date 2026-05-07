@@ -39,28 +39,28 @@ const DRIVE_IDS: Record<number, string> = {
 
 const metadata: Record<number, { title: string; description: string }> = {
   1: { title: "Cover", description: "SkinWalker Society Volume 1, Issue No. 5 - All About Skinwalkers!" },
-  2: { title: "Table of Contents", description: "Welcome Members, Cryptozoology Lifestyle, History of Skinwalkers, and more." },
-  3: { title: "Welcome Members!", description: "The study of creatures whose existence is unsupported by mainstream science." },
-  4: { title: "The Cryptozoology Lifestyle", description: "Exploring the aesthetic (Cryptidcore) and common activities like field investigations." },
-  5: { title: "Community & Connections", description: "Engagement with the cryptozoology community and the impact of mainstream media." },
-  6: { title: "The History of Skinwalkers", description: "Stories and legends from the Navajo Reservation." },
-  7: { title: "Interviews With Navajo Elders", description: "First-hand accounts from Paul Sells Sr. and Kenneth Yazzie." },
-  8: { title: "Stories from the Reservation", description: "Personal experiences shared by Marisa Sells and Eric Begaye." },
-  9: { title: "Skinwalkers in the Mainstream", description: "The disconnect between cultural representation and pop culture tropes." },
-  10: { title: "The Skinwalker Hoax", description: "The true story behind the 'Sound Only' hoax of 2021." },
-  11: { title: "The Cost of Misrepresentation", description: "How virality and hoaxes impact Indigenous cultures and cryptozoology." },
-  12: { title: "Fact Check with Erik Bard", description: "An exclusive interview with Erik Bard on searching for Skinwalkers and combatting hoaxes." },
-  13: { title: "The Future of Cryptozoology", description: "Advancing the field through scientific rigor and cultural sensitivity." },
-  14: { title: "Field Reports", description: "Recent sightings and investigations documented by our community members." },
-  15: { title: "Cryptid Gear Guide", description: "Essential tools for any serious field investigator." },
-  16: { title: "Navajo Cultural Preservation", description: "The importance of protecting sacred stories and traditions." },
-  17: { title: "Global Context", description: "Comparing Skinwalker legends to shapeshifter myths around the world." },
-  18: { title: "The Psychology of Belief", description: "Why we are drawn to the unknown and the mysterious." },
-  19: { title: "Interview: Dr. Arlan Hall", description: "Discussing the sociological impact of urban legends." },
-  20: { title: "Advanced Tracking Techniques", description: "Methods for identifying anomalous activity in the desert." },
-  21: { title: "Community Spotlight", description: "Highlighting the work of independent researchers." },
-  22: { title: "Society Archives", description: "A look back at historical documents related to Navajo shapeshifters." },
-  23: { title: "Conclusion & Future Research", description: "Summarizing our findings and outlining goals for the next issue." },
+  2: { title: "Member Directory", description: "Table of contents and welcome message for the SkinWalker Society." },
+  3: { title: "Cultural Cryptozoology", description: "An introduction to the study of creatures outside mainstream science." },
+  4: { title: "Cryptidcore Aesthetics", description: "Exploring the lifestyle, aesthetics, and field activities of paranormal enthusiasts." },
+  5: { title: "Community Synergy", description: "Connecting researchers and the impact of digital media on modern folklore." },
+  6: { title: "Navajo Origins", description: "Historical research into the traditional legends of the southwest." },
+  7: { title: "The Oral Tradition", description: "Exclusive interviews and recordings with Navajo tribal elders." },
+  8: { title: "Personal Encounters", description: "Vivid accounts and witness testimonies from those living on the reservation." },
+  9: { title: "Media vs Mythos", description: "Analyzing the divide between sacred cultural truths and Hollywood adaptations." },
+  10: { title: "Deconstructing Hoaxes", description: "A technical breakdown of the 'Sound Only' viral phenomenon." },
+  11: { title: "Integrity in Research", description: "The ethical weight of misrepresentation and the path to cultural sensitivity." },
+  12: { title: "Scientific Inquiry", description: "A conversation with Erik Bard on methodology and factual verification." },
+  13: { title: "Research Horizons", description: "Mapping the future of investigative cryptozoology and archive building." },
+  14: { title: "Observation Logs", description: "Community-submitted field notes and environmental data." },
+  15: { title: "The Investigator’s Kit", description: "Technical review of essential gear for desert field research." },
+  16: { title: "Preservation Efforts", description: "The critical mission of safeguarding Indigenous narratives for future generations." },
+  17: { title: "Comparative Folklore", description: "Global perspectives on shapeshifting entities across cultures." },
+  18: { title: "Cognitive Resonance", description: "The psychological factors behind belief in the unexplained." },
+  19: { title: "Societal Impact", description: "Dr. Arlan Hall discusses how urban legends shape community identity." },
+  20: { title: "Anomalous Tracking", description: "Advanced methods for identifying and documenting desert phenomena." },
+  21: { title: "Researcher Profile", description: "Spotlighting innovative contributions from independent field scholars." },
+  22: { title: "Restricted Archives", description: "A curation of historical documents and rare shapeshifter evidence." },
+  23: { title: "Executive Summary", description: "Final insights from Issue No. 5 and a look ahead to Volume 2." },
   24: { title: "Back Cover", description: "Skinwalker Society Volume 1, Issue No. 5 - Join the hunt." },
 };
 
@@ -195,11 +195,10 @@ export default function MagazineViewer() {
                       <div 
                         className={`absolute inset-y-0 w-20 z-10 pointer-events-none transition-opacity duration-1000 ${idx === 0 ? 'right-0 bg-gradient-to-l from-black/10' : 'left-0 bg-gradient-to-r from-black/10'}`} 
                       />
-                    )}
-
+                    )}                    {/* Page Image */}
                     {imageError[page.id] ? (
                       <div className="w-full h-full flex flex-col items-center justify-center p-12 text-center bg-neutral-50">
-                        <p className="text-neutral-300 text-xs font-bold uppercase tracking-widest mb-4">Error Loading Page {page.id}</p>
+                        <p className="text-neutral-300 text-xs font-bold uppercase tracking-widest mb-4">Error Loading Page Content</p>
                         <div className="w-12 h-1px bg-neutral-200" />
                       </div>
                     ) : (
@@ -211,11 +210,6 @@ export default function MagazineViewer() {
                         onError={() => handleImageError(page.id)}
                       />
                     )}
-
-                    {/* Page Number Overlay */}
-                    <div className={`absolute bottom-6 font-mono text-[10px] text-neutral-400 ${idx === 0 && array.length === 2 ? 'left-6' : 'right-6'}`}>
-                      {page.id.toString().padStart(2, '0')}
-                    </div>
                   </div>
                 ))}
               </motion.div>
@@ -264,7 +258,7 @@ export default function MagazineViewer() {
             className="space-y-3"
           >
             <h2 className="text-2xl font-serif italic text-neutral-900 tracking-tight">
-              {getPagesForSpread(currentPage).map(p => p.title).join(' & ')}
+              {Array.from(new Set(getPagesForSpread(currentPage).map(p => p.title))).join(' & ')}
             </h2>
             <p className="text-neutral-500 text-sm leading-relaxed font-light">
               {getPagesForSpread(currentPage)[0].description}
@@ -319,7 +313,6 @@ export default function MagazineViewer() {
                       <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors" />
                     </div>
                     <div className="space-y-1">
-                      <span className="text-[9px] font-black font-mono text-neutral-300 uppercase">{idx + 1}</span>
                       <h4 className="text-[11px] font-bold uppercase tracking-tight text-neutral-900 group-hover:text-brand transition-colors line-clamp-1">{page.title}</h4>
                     </div>
                   </button>
